@@ -1,173 +1,198 @@
-let timer;
-let seconds = 0;
-let isRunning = false;
-let isPaused = false;
-let lapCount = 0;
+let totalTime;
+let timerInterval;
+let alarmInterval;
+let running = false;
+let paused = false;
 
-const timerDisplay = document.getElementById('timer');
-const startButton = document.getElementById('start');
-const pauseButton = document.getElementById('pause');
-const resetButton = document.getElementById('reset');
-const lapButton = document.getElementById('lap');
-const clearLapsButton = document.getElementById('clearLaps');
-const exportCSVButton = document.getElementById('exportCSV');
-const lapsContainer = document.querySelector('.laps');
-const lapsControls = document.querySelector('.laps-controls');
-const lapsTableBody = document.querySelector('#lapsTable tbody');
-
-function updateDisplay() {
-    const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
-    const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-    const secs = String(seconds % 60).padStart(2, '0');
-    timerDisplay.textContent = `${hrs}:${mins}:${secs}`;
-
-
-    document.title = `${hrs}:${mins}:${secs} - Cronómetro`;
-}
+const timeDisplay = document.getElementById("time-display");
+const startButton = document.getElementById("start-button");
+const pauseButton = document.getElementById("pause-button");
+const continueButton = document.getElementById("continue-button");
+const stopButton = document.getElementById("stop-button");
+const resetButton = document.getElementById("reset-button");
+const hoursInput = document.getElementById("hours");
+const minutesInput = document.getElementById("minutes");
+const secondsInput = document.getElementById("seconds");
+const alarmSound = document.getElementById("alarm-sound");
 
 function startTimer() {
-    if (!isRunning) {
-        isRunning = true;
-        startButton.classList.add('hidden');
-        pauseButton.classList.remove('hidden');
-        resetButton.classList.remove('hidden');
-        lapButton.classList.remove('hidden');
-        timer = setInterval(() => {
-            if (!isPaused) {
-                seconds++;
-                updateDisplay();
-            }
-        }, 1000);
+    if (!running) {
+        let hours = parseInt(hoursInput.value) || 0;
+        let minutes = parseInt(minutesInput.value) || 0;
+        let seconds = parseInt(secondsInput.value) || 0;
+        totalTime = (hours * 3600) + (minutes * 60) + seconds;
+
+        if (totalTime > 0) {
+            updateTime();
+            timerInterval = setInterval(decrementTime, 1000);
+            running = true;
+            paused = false;
+            toggleButtons('start');
+        }
     }
 }
 
 function pauseTimer() {
-    if (isRunning) {
-        isPaused = !isPaused;
-        pauseButton.textContent = isPaused ? 'Reanudar' : 'Pausar';
+    if (running && !paused) {
+        clearInterval(timerInterval);
+        paused = true;
+        toggleButtons('pause');
     }
 }
 
-function resetTimer() {
-    clearInterval(timer);
-    seconds = 0;
-    isRunning = false;
-    isPaused = false;
-    lapCount = 0;
-    updateDisplay();
-    startButton.classList.remove('hidden');
-    pauseButton.classList.add('hidden');
-    resetButton.classList.add('hidden');
-    lapButton.classList.add('hidden');
-    clearLapsButton.classList.add('hidden');
-    exportCSVButton.classList.add('hidden');
-    lapsContainer.classList.add('hidden');
-    lapsControls.classList.add('hidden');
-    lapsTableBody.innerHTML = '';
+function continueTimer() {
+    if (running && paused) {
+        timerInterval = setInterval(decrementTime, 1000);
+        paused = false;
+        toggleButtons('continue');
+    }
 }
 
 function stopTimer() {
-    clearInterval(timer);
-    seconds = 0;
-    isRunning = false;
-    isPaused = false;
-    updateDisplay();
-    startButton.classList.remove('hidden');
-    pauseButton.classList.add('hidden');
-    resetButton.classList.add('hidden');
-    lapButton.classList.add('hidden');
-    clearLapsButton.classList.add('hidden');
-    exportCSVButton.classList.add('hidden');
-    lapsContainer.classList.add('hidden');
-    lapsControls.classList.add('hidden');
-    lapsTableBody.innerHTML = '';
+    clearInterval(timerInterval);
+    clearInterval(alarmInterval);
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+    running = false;
+    paused = false;
+    totalTime = 0;
+    timeDisplay.textContent = "00:00:00";
+    hoursInput.value = '';
+    minutesInput.value = '';
+    secondsInput.value = '';
+    updatePageTitle(); // Actualiza el título de la página al detener
+    toggleButtons('stop');
 }
 
-function addLap() {
-    if (isRunning) {
-        if (lapsContainer.classList.contains('hidden')) {
-            lapsContainer.classList.remove('hidden');
-            lapsControls.classList.remove('hidden');
-        }
+function resetTimer() {
+    clearInterval(timerInterval);
+    clearInterval(alarmInterval);
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
 
-        const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
-        const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-        const secs = String(seconds % 60).padStart(2, '0');
-        const lapTime = `${hrs}:${mins}:${secs}`;
+    let hours = parseInt(hoursInput.value) || 0;
+    let minutes = parseInt(minutesInput.value) || 0;
+    let seconds = parseInt(secondsInput.value) || 0;
+    totalTime = (hours * 3600) + (minutes * 60) + seconds;
+    updateTime();
 
-        const now = new Date();
-        const currentTime = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} - ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${++lapCount}</td>
-            <td>${lapTime}</td>
-            <td>${updateElapsedTime()}</td>
-            <td>${currentTime}</td>
-        `;
-        lapsTableBody.appendChild(row);
+    // Mantener el estado de los botones según el estado del temporizador
+    if (running && paused) {
+        // Si está pausado, reiniciar el temporizador y mantener el botón de pausar
+        timerInterval = setInterval(decrementTime, 1000);
+        paused = false;
+        toggleButtons('pause');
+    } else if (running) {
+        // Si está en ejecución, reiniciar el temporizador
+        timerInterval = setInterval(decrementTime, 1000);
+        toggleButtons('start');
+    } else {
+        // Si está detenido, simplemente mostrar los botones correctos
+        toggleButtons('reset');
     }
 }
 
-function updateElapsedTime() {
-    const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
-    const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-    const secs = String(seconds % 60).padStart(2, '0');
-    return `${hrs}:${mins}:${secs}`;
-}
-
-function clearLaps() {
-    lapsTableBody.innerHTML = '';
-    lapsContainer.classList.add('hidden');
-    lapsControls.classList.add('hidden');
-}
-
-function downloadCSV(csv, filename) {
-    var csvFile;
-    var downloadLink;
-
-
-    csvFile = new Blob([csv], { type: "text/csv" });
-
-
-    downloadLink = document.createElement("a");
-
-
-    downloadLink.download = filename;
-
-
-    downloadLink.href = window.URL.createObjectURL(csvFile);
-
-
-    downloadLink.style.display = "none";
-
-
-    document.body.appendChild(downloadLink);
-
-
-    downloadLink.click();
-}
-
-function exportTableToCSV(filename) {
-    var csv = [];
-    var rows = document.querySelectorAll("#lapsTable tr");
-
-    for (var i = 0; i < rows.length; i++) {
-        var row = [], cols = rows[i].querySelectorAll("td, th");
-
-        for (var j = 0; j < cols.length; j++)
-            row.push(cols[j].innerText);
-
-        csv.push(row.join(","));
+function decrementTime() {
+    if (totalTime <= 0) {
+        clearInterval(timerInterval);
+        running = false;
+        alarmSound.play();
+        alarmInterval = setInterval(() => {
+            alarmSound.play();
+        }, alarmSound.duration * 1000 + 2000);
+        updatePageTitle(); // Actualiza el título de la página al finalizar
+        toggleButtons('end');
+    } else {
+        totalTime--;
+        updateTime();
     }
-
-
-    downloadCSV(csv.join("\n"), filename);
 }
 
-startButton.addEventListener('click', startTimer);
-pauseButton.addEventListener('click', pauseTimer);
-resetButton.addEventListener('click', resetTimer);
-lapButton.addEventListener('click', addLap);
-clearLapsButton.addEventListener('click', clearLaps);
-exportCSVButton.addEventListener('click', () => exportTableToCSV('vuelta_cronometro.csv'));
+function updateTime() {
+    timeDisplay.textContent = formatTime(totalTime);
+    updatePageTitle(); // Actualiza el título de la página con el tiempo restante
+}
+
+function updatePageTitle() {
+    document.title = formatTime(totalTime) + " - Temporizador"; // Actualiza el título con el tiempo restante
+}
+
+function formatTime(seconds) {
+    let hours = Math.floor(seconds / 3600);
+    let minutes = Math.floor((seconds % 3600) / 60);
+    let secs = seconds % 60;
+
+    return (
+        (hours > 9 ? hours : "0" + hours) + ":" +
+        (minutes > 9 ? minutes : "0" + minutes) + ":" +
+        (secs > 9 ? secs : "0" + secs)
+    );
+}
+
+function toggleButtons(state) {
+    switch (state) {
+        case 'start':
+            startButton.style.display = 'none';
+            pauseButton.style.display = 'inline-block';
+            continueButton.style.display = 'none';
+            stopButton.style.display = 'inline-block';
+            resetButton.style.display = 'inline-block';
+            break;
+        case 'pause':
+            pauseButton.style.display = 'inline-block';
+            continueButton.style.display = 'none';
+            stopButton.style.display = 'inline-block';
+            resetButton.style.display = 'inline-block';
+            startButton.style.display = 'none';
+            break;
+        case 'continue':
+            pauseButton.style.display = 'inline-block';
+            continueButton.style.display = 'none';
+            stopButton.style.display = 'inline-block';
+            resetButton.style.display = 'inline-block';
+            startButton.style.display = 'none';
+            break;
+        case 'stop':
+            startButton.style.display = 'inline-block';
+            pauseButton.style.display = 'none';
+            continueButton.style.display = 'none';
+            stopButton.style.display = 'none';
+            resetButton.style.display = 'none';
+            break;
+        case 'reset':
+            startButton.style.display = 'inline-block';
+            pauseButton.style.display = paused ? 'inline-block' : 'none';
+            continueButton.style.display = 'none';
+            stopButton.style.display = 'none';
+            resetButton.style.display = 'inline-block';
+            break;
+        case 'end':
+            startButton.style.display = 'none';
+            pauseButton.style.display = 'none';
+            continueButton.style.display = 'none';
+            stopButton.style.display = 'inline-block';
+            resetButton.style.display = 'inline-block';
+            break;
+    }
+    startButton.disabled = !isValidTime();
+}
+
+function isValidTime() {
+    let hours = parseInt(hoursInput.value) || 0;
+    let minutes = parseInt(minutesInput.value) || 0;
+    let seconds = parseInt(secondsInput.value) || 0;
+    return (hours > 0 || minutes > 0 || seconds > 0);
+}
+
+function handleInputChange() {
+    startButton.disabled = !isValidTime();
+}
+
+startButton.addEventListener("click", startTimer);
+pauseButton.addEventListener("click", pauseTimer);
+continueButton.addEventListener("click", continueTimer);
+stopButton.addEventListener("click", stopTimer);
+resetButton.addEventListener("click", resetTimer);
+hoursInput.addEventListener("input", handleInputChange);
+minutesInput.addEventListener("input", handleInputChange);
+secondsInput.addEventListener("input", handleInputChange);

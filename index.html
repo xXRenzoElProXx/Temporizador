@@ -4,41 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cronómetro</title>
+    <title>Temporizador</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="icon.png" type="image/x-icon">
 </head>
 
 <body>
-    <div class="container">
-        <h1>Cronómetro</h1>
-        <div id="timer">00:00:00</div>
-        <div class="controls">
-            <button id="start">Iniciar</button>
-            <button id="pause" class="hidden">Pausar</button>
-            <button id="reset" class="hidden">Reiniciar</button>
-            <button id="lap" class="hidden">Vuelta</button>
+    <div class="timer-container">
+        <h1>Temporizador</h1>
+        <div class="input-container">
+            <input type="number" id="hours" placeholder="Horas" min="0" max="99">
+            <input type="number" id="minutes" placeholder="Mins" min="0" max="59">
+            <input type="number" id="seconds" placeholder="Segs" min="0" max="59">
         </div>
-        <div class="laps hidden">
-            <h2>Datos del Cronómetro</h2>
-            <table id="lapsTable">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Vuelta</th>
-                        <th>Tiempo Total</th>
-                        <th>Hora Actual</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            <div class="laps-controls hidden">
-                <button id="clearLaps">Borrar Datos</button>
-                <button id="exportCSV">Exportar CSV</button>
-            </div>
+        <div class="clock" id="time-display">00:00:00</div>
+        <div class="buttons">
+            <button id="start-button" disabled>Iniciar</button>
+            <button id="pause-button" style="display: none;">Pausar</button>
+            <button id="continue-button" style="display: none;">Continuar</button>
+            <button id="stop-button" style="display: none;">Detener</button>
+            <button id="reset-button" style="display: none;">Reiniciar</button>
         </div>
     </div>
+    <audio id="alarm-sound" src="bell.mp3"></audio>
     <script src="script.js"></script>
 </body>
 

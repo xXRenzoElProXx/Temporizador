@@ -1,138 +1,120 @@
 body {
-    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background: linear-gradient(135deg, #1e3a8a, #6d28d9);
+    font-family: 'Arial', sans-serif;
     margin: 0;
-    background: linear-gradient(#1e3a8a, #6d28d9);
-    color: white;
+    color: #333;
 }
 
-.container {
+.timer-container {
     text-align: center;
-    background: rgba(0, 0, 0, 0.7);
+    background: #fff;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    max-width: 90%;
+    width: 300px;
     position: relative;
-    width: 80%;
-    max-width: 400px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 h1 {
-    margin-bottom: 20px;
+    color: #1e3a8a;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-#timer {
-    font-size: 2.5rem;
-    margin: 20px 0;
-    padding: 15px;
-    background: #333;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+.input-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
+input[type="number"] {
+    font-size: 16px;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    width: 60px;
+    text-align: center;
+    transition: border-color 0.3s ease;
+}
 
-.controls {
+input[type="number"]:focus {
+    border-color: #1e3a8a;
+    outline: none;
+}
+
+.clock {
+    font-size: 3em;
+    color: #1e3a8a;
+    border: 3px solid #1e3a8a;
+    border-radius: 50%;
+    padding: 20px;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+}
+
+.clock:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.buttons {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-top: 15px;
 }
 
-button.hidden {
-    display: none;
-}
-
-button {
-    padding: 10px 20px;
+.buttons button {
+    font-size: 16px;
+    padding: 10px 15px;
     border: none;
-    border-radius: 5px;
-    background: #4a4a4a;
-    color: white;
-    font-size: 1rem;
+    border-radius: 10px;
     cursor: pointer;
-    min-width: 80px;
+    background-color: #1e3a8a;
+    color: #fff;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    flex: 1 1 120px;
+    /* Ajusta el tamaño de los botones para pantallas más pequeñas */
 }
 
-button:hover {
-    background: #575757;
+.buttons button:hover {
+    background-color: #163b6a;
+    transform: scale(1.05);
 }
 
-.hidden {
-    display: none;
+.buttons button:active {
+    transform: scale(0.98);
 }
 
-.laps {
-    max-height: 300px;
-    overflow-y: auto;
-    border: 1px solid #555;
-    border-radius: 5px;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    margin-top: 20px;
-    text-align: center;
+.buttons button:disabled {
+    background-color: #ccc;
+    cursor: default;
+    pointer-events: none;
 }
 
-.laps-controls {
-    margin-top: 10px;
+.buttons button:disabled:hover {
+    background-color: #ccc;
 }
 
-.laps-controls button {
-    margin: 5px;
-}
-
-#lapsTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-#lapsTable thead {
-    background: #444;
-}
-
-#lapsTable th,
-#lapsTable td {
-    padding: 10px;
-    border: 1px solid #555;
-}
-
-#lapsTable tbody tr:nth-child(even) {
-    background: #333;
-}
-
-#lapsTable tbody tr:nth-child(odd) {
-    background: #222;
-}
-
-
-@media (max-width: 600px) {
-    #timer {
-        font-size: 2rem;
-        padding: 10px;
-    }
-
-    .controls button {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-    }
-
-    .laps {
-        max-height: 200px;
-    }
-
-    #lapsTable th,
-    #lapsTable td {
-        font-size: 0.8rem;
-    }
-
-    .laps-controls {
-        flex-direction: row;
-    }
-
-    .laps-controls button {
-        font-size: 0.8rem;
-    }
+.buttons button:disabled:active {
+    transform: none;
 }
