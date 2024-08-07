@@ -60,7 +60,7 @@ function stopTimer() {
     hoursInput.value = '';
     minutesInput.value = '';
     secondsInput.value = '';
-    updatePageTitle(); // Actualiza el título de la página al detener
+    updatePageTitle();
     toggleButtons('stop');
 }
 
@@ -76,18 +76,14 @@ function resetTimer() {
     totalTime = (hours * 3600) + (minutes * 60) + seconds;
     updateTime();
 
-    // Mantener el estado de los botones según el estado del temporizador
     if (running && paused) {
-        // Si está pausado, reiniciar el temporizador y mantener el botón de pausar
         timerInterval = setInterval(decrementTime, 1000);
         paused = false;
         toggleButtons('pause');
     } else if (running) {
-        // Si está en ejecución, reiniciar el temporizador
         timerInterval = setInterval(decrementTime, 1000);
         toggleButtons('start');
     } else {
-        // Si está detenido, simplemente mostrar los botones correctos
         toggleButtons('reset');
     }
 }
@@ -100,7 +96,7 @@ function decrementTime() {
         alarmInterval = setInterval(() => {
             alarmSound.play();
         }, alarmSound.duration * 1000 + 2000);
-        updatePageTitle(); // Actualiza el título de la página al finalizar
+        updatePageTitle();
         toggleButtons('end');
     } else {
         totalTime--;
@@ -110,11 +106,11 @@ function decrementTime() {
 
 function updateTime() {
     timeDisplay.textContent = formatTime(totalTime);
-    updatePageTitle(); // Actualiza el título de la página con el tiempo restante
+    updatePageTitle();
 }
 
 function updatePageTitle() {
-    document.title = formatTime(totalTime) + " - Temporizador"; // Actualiza el título con el tiempo restante
+    document.title = formatTime(totalTime) + " - Temporizador";
 }
 
 function formatTime(seconds) {
