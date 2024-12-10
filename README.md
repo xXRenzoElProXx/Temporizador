@@ -48,7 +48,7 @@ cd temporizador
 4. **Detener temporizador:** Haz clic en "Detener" para finalizar el temporizador y ver el tiempo transcurrido.
 5. **Reiniciar temporizador:** Haz clic en "Reiniciar" para comenzar de nuevo desde cero.
 
-### 📂 Estructura de archivos
+## 📂 Estructura de archivos
 ```bash
 temporizador/
 ├── index.html        # Archivo principal de la aplicación.
