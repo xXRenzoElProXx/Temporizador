@@ -33,5 +33,26 @@ Este proyecto es un **temporizador interactivo** que permite realizar seguimient
 ## 🚀 Instalación y uso
 ### 1. Clona el repositorio a tu máquina local:
 ```bash
-git clone https://github.com/xXRenzoElProXx/Temporizador-Interactivo.git
+git clone https://github.com/xXRenzoElProXx/Temporizador.git
+```
+### 2. Navega a la carpeta del proyecto:
+```bash
+cd temporizador
+```
+### 3. Abre el archivo index.html en tu navegador para visualizar la aplicación.
+
+## 🧑‍💻 Uso de la aplicación
+1. Iniciar temporizador: Haz clic en el botón "Iniciar" para comenzar el temporizador desde cero.
+2. Pausar temporizador: Haz clic en "Pausar" para detener el temporizador sin reiniciarlo.
+3. Continuar temporizador: Haz clic en "Continuar" para reanudar el conteo desde donde lo dejaste.
+4. Detener temporizador: Haz clic en "Detener" para finalizar el temporizador y ver el tiempo transcurrido.
+5. Reiniciar temporizador: Haz clic en "Reiniciar" para comenzar de nuevo desde cero.
+6. 
+### 📂 Estructura de archivos
+```bash
+temporizador/
+├── index.html        # Archivo principal de la aplicación.
+├── styles.css        # Hoja de estilos de la aplicación.
+├── script.js         # Archivo JavaScript con la lógica del temporizador.
+├── screenshot.jpeg    # Captura de pantalla de la aplicación.
 ```
