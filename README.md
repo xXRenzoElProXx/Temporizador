@@ -11,7 +11,7 @@ Este proyecto es un **temporizador interactivo** que permite realizar seguimient
 - **Interfaz responsiva**: La interfaz se adapta a diferentes tamaños de pantalla, asegurando una experiencia fluida en dispositivos móviles y de escritorio.
 
 ## 📸 Imágenes
-![Captura de pantalla de la aplicación](./screenshot.jpeg)
+![Captura de pantalla de la aplicación](./screenshot.png)
 
 ## 🛠️ Tecnologías utilizadas
 <p align="center">
