@@ -42,12 +42,12 @@ cd temporizador
 ### 3. Abre el archivo index.html en tu navegador para visualizar la aplicación.
 
 ## 🧑‍💻 Uso de la aplicación
-1. Iniciar temporizador: Haz clic en el botón "Iniciar" para comenzar el temporizador desde cero.
-2. Pausar temporizador: Haz clic en "Pausar" para detener el temporizador sin reiniciarlo.
-3. Continuar temporizador: Haz clic en "Continuar" para reanudar el conteo desde donde lo dejaste.
-4. Detener temporizador: Haz clic en "Detener" para finalizar el temporizador y ver el tiempo transcurrido.
-5. Reiniciar temporizador: Haz clic en "Reiniciar" para comenzar de nuevo desde cero.
-6. 
+1. **Iniciar temporizador: **Haz clic en el botón "Iniciar" para comenzar el temporizador desde cero.
+2. **Pausar temporizador: **Haz clic en "Pausar" para detener el temporizador sin reiniciarlo.
+3.** Continuar temporizador:** Haz clic en "Continuar" para reanudar el conteo desde donde lo dejaste.
+4. **Detener temporizador: **Haz clic en "Detener" para finalizar el temporizador y ver el tiempo transcurrido.
+5. **Reiniciar temporizador: **Haz clic en "Reiniciar" para comenzar de nuevo desde cero.
+
 ### 📂 Estructura de archivos
 ```bash
 temporizador/
